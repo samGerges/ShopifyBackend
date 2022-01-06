@@ -1,0 +1,17 @@
+{
+  "name": "shopifybackend",
+  "version": "1.0.0",
+  "description": "Shopify Backend Intern Challenge",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^5.11.18",
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0"
+  }
+}
