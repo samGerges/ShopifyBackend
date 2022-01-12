@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify Backend - Inventory</title>
+</head>
+<body>
+    <h1>Inventory</h1>
+    <h3>Items</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th></th>
+        </tr>
+        <% for(let item of items){%>
+            <tr>
+                <td><%= item.name %> </td>
+                <td><%= item.amount %> </td>
+                <td><a href="/inventory/edit?id=<%=item._id%> ">edit</a></td>
+            </tr>
+        <%}%>
+    </table>
+
+    <h3>Add</h3>
+    <form action="/inventory/add" method="post">
+        <label for="name">Name</label>
+        <input type="text" name="name">
+        <br>
+        <label for="amount">Amount</label>
+        <input type="number" name="amount">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
