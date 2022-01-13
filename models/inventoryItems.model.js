@@ -1,6 +1,6 @@
 let mongoose = require("mongoose");
 
-let itemsSchema = new mongoose.Schema({
+let itemSchema = new mongoose.Schema({
     name: {
         type: String
     },
@@ -9,4 +9,4 @@ let itemsSchema = new mongoose.Schema({
     }
 })
 
-let Items = module.exports = mongoose.model('Items', itemsSchema)
+let Item = module.exports = mongoose.model('Item', itemSchema)
