@@ -1,49 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopify Backend - Inventory</title>
-</head>
-<body>
-    <h1>Inventory</h1>
-    <h3>Items</h3>
-    <table>
+
+<div class="msg-container">
+    <%- messages("message", locals) %>
+</div>
+<h1>Inventory</h1>
+<h3>Items</h3>
+<table >
+    <tr>
+        <td><button class="btn btn-primary" onclick=exportInventory()>Export Current Inventory</button></td>
+        <td><button class="btn btn-primary" onclick=exportHistory()>Export Transactions History</button></td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th scope="row">Name</th>
+        <th scope="row">Amount</th>
+        <th></th>
+    </tr>
+    <% for(let item of items){%>
         <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th></th>
+            <td><%= item.name %> </td>
+            <td><%= item.amount %> </td>
+            <td><a href="/inventory/edit?id=<%=item._id%> ">edit</a></td>
         </tr>
-        <% for(let item of items){%>
-            <tr>
-                <td><%= item.name %> </td>
-                <td><%= item.amount %> </td>
-                <td><a href="/inventory/edit?id=<%=item._id%> ">edit</a></td>
-            </tr>
-        <%}%>
-    </table>
+    <%}%>
+</table>
 
-    <h3>Add Shipment Record</h3>
-    <form action="/inventory/add" method="post">
-        <label for="name">Product Name</label>
-        <input type="text" name="name">
-        <br>
-        <label for="amount">Amount Recieved</label>
-        <input type="number" name="amount">
-        <br>
-        <input type="submit" value="Add">
-    </form>
+<h3>Add Shipment Record</h3>
+<form action="/inventory/add" method="post">
+    <div class="mb-3">
+        <label class="form-label" for="name">Product Name</label>
+        <input class="form-control" type="text" name="name">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label" for="amount">Amount Recieved</label>
+        <input class="form-control" type="number" name="amount"> 
+    </div>
+    
+    <div class="mb-3">
+        <input class="btn btn-primary" type="submit" value="Add">
+    </div>
+    
+</form>
 
-    <h3>Add Sales Record</h3>
-    <form action="/inventory/sales" method="post">
-        <label for="name">Product Name</label>
-        <input type="text" name="name">
-        <br>
-        <label for="amount">Amount Sold</label>
-        <input type="number" name="amount">
-        <br>
-        <input type="submit" value="Decrease">
-    </form>
-</body>
-</html>
+<h3>Add Sales Record</h3>
+<form action="/inventory/sales" method="post">
+    <div class="mb-3">
+        <label class="form-label" for="name">Product Name</label>
+        <input class="form-control" type="text" name="name">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label" for="amount">Amount Sold</label>
+        <input class="form-control" type="number" name="amount"> 
+    </div>
+    
+    <div class="mb-3">
+        <input class="btn btn-primary" type="submit" value="Decrease">
+    </div>
+</form>

@@ -1,11 +1,22 @@
 const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
+const fs = require('fs');
+const moment = require('moment');
+const mdq = require('mongo-date-query');
+const json2csv = require('json2csv').parse;
+const path = require('path')
 
 let Items = require('../models/inventoryItems.model')
 let Transactions = require('../models/transactions.model')
 
-let getItems = async () => {
+router.use(require('connect-flash')());
+router.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+
+let getInventory = async () => {
     
     let result = await Items.find({}, (err, items)=>{
         if (err){
@@ -21,6 +32,24 @@ let getItems = async () => {
     return result
 
 }
+
+let getTransactions = async () => {
+    
+    let result = await Transactions.find({}, (err, items)=>{
+        if (err){
+            console.log(err)
+            return
+        }
+        else{
+            return items
+        }
+            
+    })
+
+    return result
+
+}
+
 let getItemByID = async (id) => {
     
     let result = await Items.findById(id, (err, item)=>{
@@ -73,19 +102,27 @@ let createTransaction = (itemId, amountChange, type)=>{
 
 router.get('/', async (req, res)=>{
 
-    let items = await getItems()
+    let items = await getInventory()
 
-    res.render('inventory', {
+    return es.render('inventory', {
         items:items
     })
 })
 
 router.post('/add', async (req, res)=>{
 
+    let name = req.body.name
+    let amount = req.body.amount
+
+    if(name == '' || amount == ''){
+        req.flash("danger", "Missing form data")
+        return res.redirect('/inventory')
+    }
+
     let formItem = {}
 
-    formItem.name = req.body.name
-    formItem.amount = Number(req.body.amount)
+    formItem.name = name
+    formItem.amount = Number(amount)
 
     let currentItem = await getItemByName(formItem.name)
 
@@ -107,7 +144,8 @@ router.post('/add', async (req, res)=>{
                     if(err) console.log(err)
     
                     else {
-                        res.redirect('/inventory')
+                        req.flash("success", "Item found and increased inventory")
+                        return res.redirect('/inventory')
                     }
                 })
             }
@@ -119,8 +157,10 @@ router.post('/add', async (req, res)=>{
         let newItem = new Items(formItem)
 
         newItem.save((err)=>{
-            console.log(err)
-            res.redirect('/inventory')
+            if(err) console.log(err)
+
+            req.flash("success", "Item added to inventory")
+            return res.redirect('/inventory')
         })
     
     }
@@ -129,10 +169,18 @@ router.post('/add', async (req, res)=>{
 
 router.post('/sales', async (req, res)=>{
 
+    let name = req.body.name
+    let amount = req.body.amount
+
+    if(name == '' || amount== ''){
+        req.flash("danger", "Missing form data")
+        return res.redirect('/inventory')
+    }
+
     let formItem = {}
 
-    formItem.name = req.body.name
-    formItem.amount = Number(req.body.amount)
+    formItem.name = name
+    formItem.amount = Number(amount)
 
     let currentItem = await getItemByName(formItem.name)
 
@@ -155,26 +203,21 @@ router.post('/sales', async (req, res)=>{
                     if(err) console.log(err)
     
                     else {
-                        res.redirect('/inventory')
+                        req.flash("success", "Sale recorded!")
+                        return res.redirect('/inventory')
                     }
                 })
             }
             
         })
 
+    }else{
+        req.flash('danger', "Item not found")
+        return res.redirect('/inventory')
     }
     
 })
 
-
-router.get('/edit?:id', async (req, res)=>{
-    
-    let item = await getItemByID(req.query.id)
-
-    res.render('editItem', {
-        item: item
-    })
-})
 
 router.get('/edit?:id', async (req, res)=>{
     
@@ -191,12 +234,20 @@ router.post('/edit?:id', async (req, res)=>{
 
     let currentItem = await getItemByID(req.query.id)
 
-    let newItem = {}
+    let name = req.body.name
+    let amount = req.body.amount
 
-    newItem.name = req.body.name
-    newItem.amount = Number(req.body.amount)
+    if(name == '' || amount== ''){
+        req.flash("danger", "Missing form data")
+        return res.redirect('inventory')
+    }
 
-    let amountDiff = newItem.amount - currentItem.amount
+    let formItem = {}
+
+    formItem.name = name
+    formItem.amount = Number(amount)
+
+    let amountDiff = formItem.amount - currentItem.amount
 
     type = ""
 
@@ -209,7 +260,7 @@ router.post('/edit?:id', async (req, res)=>{
 
     let transaction = createTransaction(req.query.id, Math.abs(amountDiff), type)
 
-    Items.findOneAndUpdate(query, newItem, (err)=>{
+    Items.findOneAndUpdate(query, formItem, (err)=>{
         if(err) console.log(err)
         else {
 
@@ -219,7 +270,8 @@ router.post('/edit?:id', async (req, res)=>{
                 if(err) console.log(err)
 
                 else {
-                    res.redirect('/inventory')
+                    req.flash("success", "Item updated!")
+                    return res.redirect('/inventory')
                 }
             })
         }
@@ -234,9 +286,46 @@ router.get('/edit/delete?:id', (req, res)=>{
 
     Items.findOneAndDelete(query, (err)=>{
         if(err) console.log(err)
-        else 
-            res.redirect('/inventory')
+        else {
+            req.flash("success", "Item successfuly deleted!")
+            return res.redirect('/inventory')
+        }
     })
+
+})
+
+router.get('/export/inventory', async (req, res) =>{
+    let items = await getInventory()
+
+    const fields = ['id', 'name', 'amount'];
+
+    let csv
+    try {
+      csv = json2csv(items, { fields });
+      const dateTime = moment().format('YYYYMMDDhhmmss');
+
+      return res.attachment("csv-" + dateTime + ".csv").send(csv)
+
+    } catch (err) {
+      return res.status(500).json({ err });
+    }
+
+})
+router.get('/export/history', async (req, res) =>{
+    let items = await getTransactions()
+
+    const fields = ["id", "itemId", "amount", "type", "date"];
+
+    let csv
+    try {
+      csv = json2csv(items, { fields });
+      const dateTime = moment().format('YYYYMMDDhhmmss');
+
+      return res.attachment("csv-" + dateTime + ".csv").send(csv)
+
+    } catch (err) {
+      return res.status(500).json({ err });
+    }
 
 })
 
