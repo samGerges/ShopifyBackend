@@ -303,7 +303,6 @@ router.get('/export/inventory', async (req, res) =>{
     try {
       csv = json2csv(items, { fields });
       const dateTime = moment().format('YYYYMMDDhhmmss');
-
       return res.attachment("csv-" + dateTime + ".csv").send(csv)
 
     } catch (err) {
@@ -320,7 +319,6 @@ router.get('/export/history', async (req, res) =>{
     try {
       csv = json2csv(items, { fields });
       const dateTime = moment().format('YYYYMMDDhhmmss');
-
       return res.attachment("csv-" + dateTime + ".csv").send(csv)
 
     } catch (err) {
