@@ -104,7 +104,7 @@ router.get('/', async (req, res)=>{
 
     let items = await getInventory()
 
-    return es.render('inventory', {
+    return res.render('inventory', {
         items:items
     })
 })
