@@ -1,13 +1,13 @@
 # ShopifyBackend
-This project was built for Shopify Backend Developer Intern Challenge - Summer 2022
+<li>This project was built for Shopify Backend Developer Intern Challenge - Summer 2022
 <br/>
-The web application is built with NodeJS, Express, MongoDB, EJS template and Bootstrap.
+The web application is built with NodeJS, Express, MongoDB, EJS template and Bootstrap.</li>
 <br/>
-The feature of choice implemented is Exporting data to CSV with a click of a button.
+<li>The feature of choice implemented is Exporting data to CSV with a click of a button.</li>
 <br/>
-Please make sure you have mongodb and npm installed.
+<li>Please make sure you have mongodb and npm installed.</li>
 <br/>
-Instructions
+- Instructions
 <br/>
 1- Clone the repo
 <br/>
