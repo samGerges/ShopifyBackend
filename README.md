@@ -1,5 +1,5 @@
 # ShopifyBackend
-<li>This project was built for Shopify Backend Developer Intern Challenge - Summer 2022
+<li>This project was built for Shopify Backend Developer Intern Challenge - Summer 2022. 
 The web application is built with NodeJS, Express, MongoDB, EJS template and Bootstrap.</li>
 <br/>
 <li>The feature of choice implemented is Exporting data to CSV with a click of a button.</li>
@@ -7,7 +7,7 @@ The web application is built with NodeJS, Express, MongoDB, EJS template and Boo
 <li>Please make sure you have mongodb and npm installed.</li>
 <br/>
 <li>Instructions
-<br/>
+  <p><br/>
 1- Clone the repo
 <br/>
 2- Run command "npm install"
@@ -20,5 +20,5 @@ The web application is built with NodeJS, Express, MongoDB, EJS template and Boo
 <br/>
 5- Run command "nodemon main.js" 
 <br/>
-6- Then in the terminal it will output a local url for the web application. Copy the url and paste it in your Chrome browser
+6- Then in the terminal it will output a local url for the web application. Copy the url and paste it in your Chrome browser</p>
 </li>
