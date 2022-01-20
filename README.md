@@ -6,8 +6,8 @@ The web application is built with NodeJS, Express, MongoDB, EJS template and Boo
 <br/>
 <li>Please make sure you have mongodb and npm installed.</li>
 <br/>
-<li>Instructions
-  <p><br/>
+Instructions
+<br/>
 1- Clone the repo
 <br/>
 2- Run command "npm install"
@@ -21,4 +21,4 @@ The web application is built with NodeJS, Express, MongoDB, EJS template and Boo
 5- Run command "nodemon main.js" 
 <br/>
 6- Then in the terminal it will output a local url for the web application. Copy the url and paste it in your Chrome browser</p>
-</li>
+
