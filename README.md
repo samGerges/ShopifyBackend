@@ -20,5 +20,5 @@ The web application is built with NodeJS, Express, MongoDB, EJS template and Boo
 <br/>
 <ol>5- Run command "nodemon main.js"</ol>
 <br/>
-<ol>6- Then in the terminal it will output a local url for the web application. Copy the url and paste it in your Chrome browser</ol>
+<ol>6- Then in the terminal it will output a local url for the web application. Copy the url and paste it in the browser</ol>
 
